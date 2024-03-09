@@ -174,6 +174,7 @@ def main(args = None, custom_args = None, save_best = False):
     if custom_args != None:
         args = replace_args_with_dict_values(args, custom_args)
     data = get_dataset(args.seed_num, args.dataset, args.split, args.data_format, args.low_label_test)
+    ## Dataset -> COra split -> random, format -> sbert 
     seeds = [i for i in range(args.seed_num)]
     best_model = None
     best_val = 0

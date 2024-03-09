@@ -1,0 +1,7 @@
+
+python3 baseline.py 
+--data_format sbert 
+--split random 
+--dataset pubmed 
+--lr 0.01 
+--seed_num 5

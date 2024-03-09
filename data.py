@@ -112,17 +112,21 @@ def read_and_unpkl(path):
 
 
 def get_dataset(seed_num, dataset, split, data_format, low_label_test):
+    ## Dataset -> COra split -> random, format -> sbert , low label -> False
     if low_label_test > 0:
         old_mask = False 
     else:
         old_mask = True
-    seeds = [i for i in range(seed_num)]
+    # old_mask = True
+    seeds = [i for i in range(seed_num)] # 0,1,2,3,4
     if 'pl' in split:
         data = torch.load(f"./preprocessed_data/new/{dataset}_random_{data_format}.pt", map_location='cpu')
     else:
         if data_format == 'raw':
             data = Planetoid(f"./data/planetoid", dataset.capitalize())[0]    
         else:
+            # running this
+            # cora_random_sbert.pt
             data = torch.load(f"./preprocessed_data/new/{dataset}_{split}_{data_format}.pt", map_location='cpu')
     if 'pl' in split:
         pl_data = torch.load(f"./preprocessed_data/new/{dataset}_random_pl.pt")
@@ -137,6 +141,7 @@ def get_dataset(seed_num, dataset, split, data_format, low_label_test):
             pl_list = [mapping[i] for i in pl_list]
             pseudo_labels = torch.tensor(pl_list)
     else:
+        # set to None
         pl_data = None
     if dataset == "products" or dataset == "arxiv":
         data.train_masks = [data.train_masks[0] for _ in range(seed_num)]
@@ -147,6 +152,7 @@ def get_dataset(seed_num, dataset, split, data_format, low_label_test):
         data.train_masks = [data.train_masks[i] for i in range(seed_num)]
         data.val_masks = [data.val_masks[i] for i in range(seed_num)]
         data.test_masks = [data.test_masks[i] for i in range(seed_num)]
+        # returned here
         return data
     new_train_masks = []
     new_val_masks = []
@@ -430,7 +436,7 @@ def get_word2vec(raw_texts):
 
 def ogb_arxiv_dataset():
     arxiv_df = pd.read_csv("./preprocessed_data/ogb_arxiv.csv")
-    data = ogb_data(False, None).cpu()
+    data = ogb_data(False, None).cpu() # where and what is this ogb_data?
     data.paper_id = arxiv_df['id'].tolist()
     data.title = arxiv_df['title'].tolist()
     data.abs = arxiv_df['abstract'].tolist()
