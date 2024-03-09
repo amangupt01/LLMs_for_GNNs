@@ -36,7 +36,7 @@ from torch_geometric.utils import homophily
 from utils import delete_after_brace
 import json
 from langchain.embeddings import LlamaCppEmbeddings
-from ogbn_products import get_raw_dataset
+# from ogbn_products import get_raw_dataset
 from gensim.test.utils import datapath
 from gensim.models import KeyedVectors
 from tqdm import tqdm

@@ -1,2 +1,7 @@
 preprocessed_data/
 __pycache__/
+
+logs/
+openai_out/
+output/
+runs/
