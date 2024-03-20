@@ -5,3 +5,5 @@ logs/
 openai_out/
 output/
 runs/
+.vscode/
+*.pt

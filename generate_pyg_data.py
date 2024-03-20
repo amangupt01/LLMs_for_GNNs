@@ -1,20 +1,28 @@
 import torch
 import os.path as osp
-from data import get_tf_idf_by_texts, get_llama_embedding, get_word2vec, get_sbert_embedding, set_api_key, get_ogbn_dataset, get_e5_large_embedding
+from data import get_tf_idf_by_texts, get_llama_embedding, get_word2vec, get_sbert_embedding, \
+    set_api_key, get_ogbn_dataset, get_e5_large_embedding, get_mistral_embedding, \
+    get_mixedbread_embedding, get_gist_small_embedding
 from api import openai_ada_api
 import h5py
 import numpy as np
 from torch_geometric.utils import index_to_mask
 from torch_geometric.data import GraphSAINTRandomWalkSampler, NeighborSampler
 from data import set_seed_config, LabelPerClassSplit, generate_random_mask
-from utils import knowledge_augmentation, compute_pca_with_whitening, bert_whitening
+# from utils import knowledge_augmentation, compute_pca_with_whitening, bert_whitening
 
 
 def main():
-    dataset = ['cora', 'pubmed']
-    split = ['random', 'fixed']
-    ogb_dataset = ['arxiv', 'products']
-    embedding = ["tfidf"]
+    # dataset = ['cora', 'pubmed']
+    # split = ['random', 'fixed']
+    # ogb_dataset = ['arxiv', 'products']
+    # embedding = ["tfidf"]
+    dataset = ['cora']
+    split = ['random']
+    # embedding = ["sbert"]
+    # embedding = ["mistral"]
+    embedding = ['gist_small']
+    # embedding = ['mixedbread']
     # knowledge = ["cora", "pubmed"]
     data_path = "./preprocessed_data"
     ## if match default, just skip
@@ -32,7 +40,7 @@ def main():
     data_obj = None
     for name in dataset:
         for setting in split:
-            if name in ogb_dataset and setting == 'random': continue
+            # if name in ogb_dataset and setting == 'random': continue
             if name == "cora" and setting == 'random':
                 data_obj = torch.load("./preprocessed_data/new/cora_random_sbert.pt", map_location="cpu")
                 data_obj.raw_texts = data_obj.raw_text
@@ -105,6 +113,12 @@ def main():
                 elif typ == 'sbert':
                     #if "know" not in name:
                     data_obj.x = get_sbert_embedding(data_obj.raw_texts)
+                elif typ == 'mistral':
+                    data_obj.x = get_mistral_embedding(data_obj.raw_texts)
+                elif typ == "mixedbread":
+                    data_obj.x = get_mixedbread_embedding(data_obj.raw_texts)
+                elif typ == 'gist_small':
+                    data_obj.x = get_gist_small_embedding(data_obj.raw_texts)
                 elif typ == 'know_inp_sb':
                     texts_inp, _ = knowledge_augmentation(data_obj.raw_texts, data_obj.entity, strategy='inplace')
                     data_obj.x = get_e5_large_embedding(texts_inp, 'cuda', name + 'knowinp', batch_size=16)
@@ -282,6 +296,8 @@ def main():
 
                 torch.save(data_obj, osp.join(data_path, "new", f"{name}_{setting}_{typ}.pt"))
                 print("Save object {}".format(osp.join(data_path, "new", f"{name}_{setting}_{typ}.pt")))
+                # torch.save(data_obj, osp.join(data_path, "new", f"{name}_{setting}_{typ}_updated.pt"))
+                # print("Save object {}".format(osp.join(data_path, "new", f"{name}_{setting}_{typ}_updated.pt")))
 
 
 
@@ -290,5 +306,5 @@ def main():
 
 
 if __name__ == '__main__':
-    set_api_key()
+    # set_api_key()
     main()

@@ -45,7 +45,7 @@ from torch import Tensor
 import google.generativeai as palm
 import yaml
 import ipdb
-
+from sentence_transformers import SentenceTransformer
 
 
 OPENAI_OUT = './openai_out'
@@ -759,6 +759,21 @@ def get_sbert_embedding(texts):
     sbert_model = sbert('cuda')
     sbert_embeds = sbert_model.encode(texts, batch_size=8, show_progress_bar=True)
     return torch.tensor(sbert_embeds)
+
+def get_mistral_embedding(texts):
+    model = SentenceTransformer("Salesforce/SFR-Embedding-Mistral")
+    mistral_embeds = model.encode(texts, batch_size=8, show_progress_bar=True)
+    return torch.tensor(mistral_embeds)
+
+def get_mixedbread_embedding(texts):
+    model = SentenceTransformer("mixedbread-ai/mxbai-embed-large-v1")
+    mixedbread_embeds = model.encode(texts, batch_size=8, show_progress_bar=True)
+    return torch.tensor(mixedbread_embeds)
+
+def get_gist_small_embedding(texts):
+    model = SentenceTransformer("avsolatorio/GIST-small-Embedding-v0", revision=None)
+    gist_small_embeds = model.encode(texts, batch_size=8, show_progress_bar=True)
+    return torch.tensor(gist_small_embeds)
 
 def average_pool(last_hidden_states: Tensor,
                  attention_mask: Tensor) -> Tensor:
