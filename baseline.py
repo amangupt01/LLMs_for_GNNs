@@ -223,7 +223,7 @@ def main(args = None, custom_args = None, save_best = False):
         print(f"Test Accuracy: {mean_test_acc:.4f} ± {std_test_acc:.4f}")
         print("Test acc: {}".format(test_result_acc))
     if save_best:
-        pkl_and_write(args, osp.join("./bestargs", f"{args.model_name}_{args.dataset}_{args.data_format}.pkl"))
+        pkl_and_write(args, osp.join("./bestargs", f"{args.model_name}_{args.dataset}_{args.data_format}_{args.split}.pkl"))
     writer.close()
 
 

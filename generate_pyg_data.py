@@ -2,7 +2,7 @@ import torch
 import os.path as osp
 from data import get_tf_idf_by_texts, get_llama_embedding, get_word2vec, get_sbert_embedding, \
     set_api_key, get_ogbn_dataset, get_e5_large_embedding, get_mistral_embedding, \
-    get_mixedbread_embedding, get_gist_small_embedding
+    get_mixedbread_embedding, get_gist_small_embedding, get_e5_small_embedding
 from api import openai_ada_api
 import h5py
 import numpy as np
@@ -10,6 +10,7 @@ from torch_geometric.utils import index_to_mask
 from torch_geometric.data import GraphSAINTRandomWalkSampler, NeighborSampler
 from data import set_seed_config, LabelPerClassSplit, generate_random_mask
 # from utils import knowledge_augmentation, compute_pca_with_whitening, bert_whitening
+from utils import knowledge_augmentation
 
 
 def main():
@@ -18,10 +19,11 @@ def main():
     # ogb_dataset = ['arxiv', 'products']
     # embedding = ["tfidf"]
     dataset = ['cora']
-    split = ['random']
+    split = ['fixed', 'random']
     # embedding = ["sbert"]
     # embedding = ["mistral"]
-    embedding = ['gist_small']
+    # embedding = ['e5-small']
+    embedding = ['KEA_TA', 'KEA', 'PE', 'TAPE']
     # embedding = ['mixedbread']
     # knowledge = ["cora", "pubmed"]
     data_path = "./preprocessed_data"
@@ -119,13 +121,39 @@ def main():
                     data_obj.x = get_mixedbread_embedding(data_obj.raw_texts)
                 elif typ == 'gist_small':
                     data_obj.x = get_gist_small_embedding(data_obj.raw_texts)
-                elif typ == 'know_inp_sb':
+                elif typ == 'e5-small':
+                    data_obj.x = get_e5_small_embedding(data_obj.raw_texts)
+                elif typ == 'e5-large':
+                    data_obj.x = get_e5_large_embedding(data_obj.raw_texts, 'cuda', name + 'e5large', batch_size=16)
+                elif typ == 'KEA_TA':
+                    # KEA-I + TA
                     texts_inp, _ = knowledge_augmentation(data_obj.raw_texts, data_obj.entity, strategy='inplace')
-                    data_obj.x = get_e5_large_embedding(texts_inp, 'cuda', name + 'knowinp', batch_size=16)
-                elif typ == "know_sep_sb":
+                    data_obj.x = get_e5_small_embedding(texts_inp)
+                elif typ == "KEA":
+                    # KEA-S/KEA-I
                     _, knowledge = knowledge_augmentation(data_obj.raw_texts, data_obj.entity, strategy='separate')
-                    data_obj.x = get_e5_large_embedding(knowledge, 'cuda', name + 'knowsep', batch_size=16)
-                elif typ == 'ada':
+                    data_obj.x = get_e5_small_embedding(knowledge)
+                elif typ == "PE":
+                    # PE
+                    exp = torch.load(f"./preprocessed_data/new/{name}_explanation.pt")
+                    data_obj.x = get_e5_small_embedding(exp)
+                elif typ == "TAPE":
+                    pe_dataset = torch.load(f"./preprocessed_data/new/{name}_explanation.pt")
+                    text = []
+                    count = 0
+                    for i in range(len(pe_dataset)):
+                        try:
+                            # p_dataset.append(i.split("\n\n"))[0]
+                            # e_dataset.append(" ".join(i.split("\n\n")[1:]))
+                            text.append(data_obj.raw_texts[i] +
+                                        "\nThe above text contains the following labels: " + pe_dataset[i].split("\n\n")[0] +
+                                        "\nThe following are the explainations for each of the labels: " + " ".join(pe_dataset[i].split("\n\n")[1:]))
+                        except:
+                            count += 1
+                            text.append(data_obj.raw_texts[i]+ 
+                                        '\nThe following is some information about the above text: ' + pe_dataset[i])
+                    data_obj.x = get_e5_small_embedding(text)
+                elif typ == 'ada': 
                     if name in ['cora', 'citeseer', 'pubmed']:    
                         data_obj.x = torch.tensor(openai_ada_api(data_obj.raw_texts))
                     elif name == 'arxiv':
@@ -213,9 +241,6 @@ def main():
                         xs.append(x)
                     data_obj.xs = xs 
                     data_obj.x = xs[0]
-                elif typ == "know_exp_sb":
-                    exp = torch.load(f"./preprocessed_data/new/{name}_explanation.pt")
-                    data_obj.x = get_sbert_embedding(exp)
                 elif typ == "pl":
                     pl = torch.load(f"./preprocessed_data/new/{name}_pred.pt")
                     data_obj.x = pl
@@ -294,8 +319,8 @@ def main():
                     data_obj.test_masks = new_test_masks
 
 
-                torch.save(data_obj, osp.join(data_path, "new", f"{name}_{setting}_{typ}.pt"))
-                print("Save object {}".format(osp.join(data_path, "new", f"{name}_{setting}_{typ}.pt")))
+                torch.save(data_obj, osp.join(data_path, "new", f"{name}_{setting}_{typ}_e5-small.pt"))
+                print("Save object {}".format(osp.join(data_path, "new", f"{name}_{setting}_{typ}_e5-small.pt")))
                 # torch.save(data_obj, osp.join(data_path, "new", f"{name}_{setting}_{typ}_updated.pt"))
                 # print("Save object {}".format(osp.join(data_path, "new", f"{name}_{setting}_{typ}_updated.pt")))
 

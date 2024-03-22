@@ -46,7 +46,7 @@ import google.generativeai as palm
 import yaml
 import ipdb
 from sentence_transformers import SentenceTransformer
-
+from gensim.models import Word2Vec
 
 OPENAI_OUT = './openai_out'
 
@@ -419,6 +419,7 @@ def get_word2vec(raw_texts):
     raw_text = [[ x for x in line.lower().split(' ') if x.isalpha()] for line in raw_texts]
     w2v_path = load_secret()['word2vec']['path']
     word2vec = KeyedVectors.load_word2vec_format(w2v_path, binary = True)
+    # word2vec = Word2Vec.load(w2v_path)
     vecs = []
     for sentence in raw_text:
         tokens = [x for x in sentence if x.isalpha()]
@@ -746,13 +747,28 @@ def cora_entity_enhancement():
 
 
 def get_llama_embedding(texts):
-    embeddings = []
-    model_path = load_secret()['llama']['path']
-    llama = LlamaCppEmbeddings(model_path=model_path)
-    for text in tqdm(texts):
-        emb = llama.embed_query(text)
-        embeddings.append(torch.tensor(emb))
-    return torch.stack(embeddings)
+    # embeddings = []
+    # model_path = load_secret()['llama']['path']
+    # llama = LlamaCppEmbeddings(model_path=model_path)
+    # for text in tqdm(texts):
+    #     emb = llama.embed_query(text)
+    #     embeddings.append(torch.tensor(emb))
+    # return torch.stack(embeddings)
+# def get_llama_2_7b_embedding(texts):
+    model_name = "meta-llama/Llama-2-7b-chat-hf"
+    tokenizer = AutoTokenizer.from_pretrained(model_name)
+    tokenizer.add_special_tokens({'pad_token': '[PAD]'})
+    model = AutoModel.from_pretrained(model_name)
+    
+    # Tokenize the texts
+    inputs = tokenizer(texts, padding=True, return_tensors="pt", truncation=True, max_length=512)
+    
+    # Generate embeddings
+    with torch.no_grad():
+        outputs = model(**inputs)
+        embeddings = outputs.last_hidden_state.mean(dim=1)
+    
+    return embeddings
 
 
 def get_sbert_embedding(texts):
@@ -774,6 +790,11 @@ def get_gist_small_embedding(texts):
     model = SentenceTransformer("avsolatorio/GIST-small-Embedding-v0", revision=None)
     gist_small_embeds = model.encode(texts, batch_size=8, show_progress_bar=True)
     return torch.tensor(gist_small_embeds)
+
+def get_e5_small_embedding(texts):
+    model = SentenceTransformer('intfloat/e5-small')
+    embeddings = model.encode(texts, show_progress_bar=True)
+    return torch.tensor(embeddings)
 
 def average_pool(last_hidden_states: Tensor,
                  attention_mask: Tensor) -> Tensor:

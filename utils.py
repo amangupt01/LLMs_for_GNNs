@@ -739,14 +739,14 @@ def knowledge_augmentation(original_texts: list, augment_knowledge: list, strate
             know_dict = ast.literal_eval(dict_str)
             for key, value in know_dict.items():
                 if strategy == "back":
-                    t += f" {value} "
+                    t += f" {value} " # added only description to t
                     know_str = dict_str
                 elif strategy == "separate":
-                    know_str += f" {value};"
+                    know_str += f" {value};" # added only description to know_str
                     # total_know.append(know_str)
                     # total_texts.append(texts)
                 elif strategy == "inplace":
-                    pos = texts.find(key) + len(key)
+                    pos = texts.find(key) + len(key) # find the entity and replace it with the descriptiom
                     t = texts[:pos] + f" ({value}) " + texts[pos:]
                     know_str = dict_str
                     # total_texts.append(texts)

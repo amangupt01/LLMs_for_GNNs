@@ -28,6 +28,22 @@ Gist_small lr 0.01 random -
 Test Accuracy: 82.91 ± 0.72
 Test acc: [0.8250460405156538, 0.8250460405156538, 0.8213627992633518, 0.8416206261510129, 0.8324125230202578]
 
+tfidf
+Test Accuracy: 81.07 ± 1.41
+Test acc: [0.8195211786372008, 0.7826887661141805, 0.8158379373848987, 0.8195211786372008, 0.8158379373848987]
+
+Word2Vec
+Test Accuracy: 71.60 ± 2.24
+Test acc: [0.7016574585635359, 0.6887661141804788, 0.7071823204419889, 0.7311233885819521, 0.7513812154696132]
+
+e5-Large
+Test Accuracy: 82.21 ± 1.67
+Test acc: [0.8029465930018416, 0.8066298342541437, 0.8434622467771639, 0.8397790055248618, 0.8176795580110497]
+
+e5-small
+Test Accuracy: 82.47 ± 0.63
+Test acc: [0.8232044198895028, 0.8158379373848987, 0.8342541436464088, 0.8287292817679558, 0.8213627992633518]
+
 ### FIXED - Low Label Setting####
 
 Mixedbread lr 0.01 fixed -
@@ -47,6 +63,32 @@ Test Accuracy: 73.88 ± 2.14
 Test acc: [0.7432301740812379, 0.7412959381044487, 0.6982591876208898, 0.7606382978723404, 0.7504835589941973]
 
 
+KEA Random E5 0.01
+Test Accuracy: 80.29 ± 0.84
+Test acc: [0.8029465930018416, 0.8029465930018416, 0.7882136279926335, 0.8139963167587477, 0.8066298342541437]
+
+KEA Fixed E5 0.01
+Test Accuracy: 68.40 ± 2.11
+Test acc: [0.7064796905222437, 0.6929400386847195, 0.6441005802707931, 0.6856866537717602, 0.6910058027079303]
+
+
+Experiments to Run
+Type-1 (GCN, GAT, MLP, GraphSage)
+tfidf - Random and Fixed
+Word2Vec - Random and Fixed
+Sbert - Random and Fixed
+Mistral - Random and Fixed
+Mixedbread - Random and Fixed
+Gist_small - Random and Fixed
+Llama - Random and Fixed
+
+
+
+Experiment Levels for Type-2
+Already - 2(random vs fixed) * 3 (GCN, GAT, MLP) - 6
+1) Appending Stage -> Either at Text Level or at Embedding Level - 2
+2) Combination fo TAPE and KIA (TAPE+KIA, TA + KEA!!, KEA!!, PE!!, TAPE) - 4
+3) Differnet types of Models for Embeddings- (sbert, e5-small, Mistral) - 2
 
 
 

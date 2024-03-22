@@ -1,0 +1,21 @@
+KEA+TA & \(88.55 \pm 1.08\) & \(88.47 \pm 1.05\) & \(81.22 \pm 1.16\) \\
+KEA & \(87.92 \pm 1.04\) & \(87.62 \pm 1.04\) & \(77.94 \pm 0.91\) \\
+PE & \(88.10 \pm 1.42\) & \(87.59 \pm 1.24\) & \(80.41 \pm 1.76\) \\
+TAPE & \(88.66 \pm 0.98\) & \(88.03 \pm 1.11\) & \(82.58 \pm 1.39\) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[htbp]
+\centering
+\caption{Architecture-2 results for Low-label settings}
+\label{tab:my_label}
+\begin{tabular}{@{}lccc@{}}
+\toprule
+\textbf{Method} & \textbf{GCN} & \textbf{GAT} & \textbf{MLP} \\
+\midrule
+\textbf{sbert Embeddings} & & & \\
+KEA+TA & \(82.25 \pm 0.69\) & \(82.73 \pm 1.11\) & \(71.98 \pm 1.19\) \\
+KEA & \(82.20 \pm 1.06\) & \(82.40 \pm 0.68\) & \(68.83 \pm 1.28\) \\
+PE & \(82.58 \pm 1.29\) & \(82.28 \pm 1.37\) & \(72.96 \pm 1.38\) \\
+TAPE & \(83.14 \pm 1.52\) & \(83.24 \pm 1.53\) & \(74.92 \pm 1.77\) \\
