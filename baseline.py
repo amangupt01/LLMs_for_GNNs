@@ -155,6 +155,16 @@ def train_pipeline(seeds, args, epoch, data, writer, need_train, mode="main"):
                 best_model = model
         if 'pl' in args.split:
             data.y = data.backup_y
+        x_save = data.x
+        for i in range(model.num_layers-1):
+            x_save = F.dropout(x_save, p=model.dropout, training=False)
+            x_save = model.convs[i](x_save, data.edge_index)
+            x_save = model.norms[i](x_save)
+            x_save = F.relu(x_save)
+        # save x_save
+        torch.save(x_save, f'GCN_Layer2_outputs.pt')
+        
+
         test_acc, res = test(best_model, data, args.return_embeds, data.test_mask)
         test_result_acc.append(test_acc)
         val_result_acc.append(best_val)

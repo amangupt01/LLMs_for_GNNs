@@ -22,7 +22,7 @@ def get_command_line_args():
      parser.add_argument('--num_split', type=int, default=1)
      parser.add_argument('--sweep_split', type=int, default=1)
      parser.add_argument('--output_intermediate', type=int, default=0)
-     parser.add_argument('--num_layers', type=int, default=2)
+     parser.add_argument('--num_layers', type=int, default=3) ### HERE DEFAULT WAS 2 I CHANGED IT TO 3
      parser.add_argument('--hidden_dimension', type=int, default=256)
      parser.add_argument('--dropout', type=float, default=0.5)
      parser.add_argument('--optim', type=str, default='adam')
