@@ -30,5 +30,14 @@ conda activate <myenv>
 - After getting the final embedding run the command above for ```baseline.py``` using dataset as ```sbert_extra_embed```
 - You can change the '--num_layers' parameter in ```args.py``` to regenerate the ablation results
 
+##### NEST
+- Use ```title_maker.py``` to generate a short title/summary of each node in the dataset.
+- Use ```create_data.py``` to create the NEST augmented data. The file takes arguments for dataset, number of nodes' whose titles are to be appended and which nodes' titles are to be appended.
+- Use the newly generated ```torch_geometric``` object in place of the standard data objects in ```generate_pyg_data.py``` to generate embeddings for the augmented text.
+- After getting the final embedding run the command above for ```baseline.py``` using this new object.
+
+##### Running hyperparameter search
+- Run script ```hypertune.sh``` as ```./hypertune.sh <param>``` to run a sweep over hyperparamters.
+
 
 
