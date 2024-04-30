@@ -18,12 +18,13 @@ def main():
     # split = ['random', 'fixed']
     # ogb_dataset = ['arxiv', 'products']
     # embedding = ["tfidf"]
-    dataset = ['cora']
-    split = ['fixed', 'random']
-    # embedding = ["sbert"]
+    dataset = ['citeseer']
+    split = ['random', 'fixed']
     # embedding = ["mistral"]
-    # embedding = ['e5-small']
-    embedding = ['KEA_TA', 'KEA', 'PE', 'TAPE']
+    # embedding = ["mistral"]
+    # embedding = ['e5-large']
+    embedding = ['gist_small']
+    # embedding = ['KEA_TA', 'KEA', 'PE', 'TAPE']
     # embedding = ['mixedbread']
     # knowledge = ["cora", "pubmed"]
     data_path = "./preprocessed_data"
@@ -51,10 +52,14 @@ def main():
                 data_obj = torch.load("./preprocessed_data/new/cora_fixed_sbert.pt", map_location="cpu")
                 data_obj.raw_texts = data_obj.raw_text
                 data_obj.category_names = [data_obj.label_names[i] for i in data_obj.y.tolist()]
+            elif name == 'history' and setting == 'random':
+                data_obj = torch.load("new_dataset/history_books_random.pt", map_location="cpu")
+                data_obj.raw_texts = data_obj.raw_text
+                # data_obj.category_names = [data_obj.label_names[i] for i in data_obj.y.tolist()]
             elif name == "citeseer" and setting == 'random':
-                data_obj = torch.load("./preprocessed_data/new/citeseer_random_sbert.pt", map_location="cpu")
+                data_obj = torch.load("./preprocessed_data/new/citeseer_random_25.pt", map_location="cpu")
             elif name == "citeseer" and setting == 'fixed':
-                data_obj = torch.load("./preprocessed_data/new/citeseer_fixed_sbert.pt", map_location="cpu")
+                data_obj = torch.load("./preprocessed_data/new/citeseer_random_25.pt", map_location="cpu")
             elif name == "pubmed" and setting == 'random':
                 data_obj = torch.load("./preprocessed_data/new/pubmed_random_sbert.pt", map_location="cpu")
             elif name == "pubmed" and setting == 'fixed':
@@ -319,10 +324,10 @@ def main():
                     data_obj.test_masks = new_test_masks
 
 
-                torch.save(data_obj, osp.join(data_path, "new", f"{name}_{setting}_{typ}_e5-small.pt"))
-                print("Save object {}".format(osp.join(data_path, "new", f"{name}_{setting}_{typ}_e5-small.pt")))
-                # torch.save(data_obj, osp.join(data_path, "new", f"{name}_{setting}_{typ}_updated.pt"))
-                # print("Save object {}".format(osp.join(data_path, "new", f"{name}_{setting}_{typ}_updated.pt")))
+                # torch.save(data_obj, osp.join(data_path, "new", f"{name}_{setting}_{typ}_e5-small.pt"))
+                # print("Save object {}".format(osp.join(data_path, "new", f"{name}_{setting}_{typ}_e5-small.pt")))
+                torch.save(data_obj, osp.join(data_path, "new", f"{name}_{setting}_{typ}.pt"))
+                print("Save object {}".format(osp.join(data_path, "new", f"{name}_{setting}_{typ}.pt")))
 
 
 

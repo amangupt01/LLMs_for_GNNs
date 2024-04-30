@@ -8,8 +8,8 @@ for i in "random" "fixed"
 do
     for j in 'MLP' 'GCN' 'GAT'
     do
-        echo python3 baseline.py --data_format $MODEL_NAME --split $i --dataset cora --seed_num 5 --model_name $j --mode sweep
-        python3 baseline.py --data_format $MODEL_NAME --split $i --dataset cora --seed_num 5 --model_name $j --mode sweep
+        echo python3 baseline.py --data_format $MODEL_NAME --split $i --dataset citeseer --seed_num 5 --model_name $j --mode sweep
+        python3 baseline.py --data_format $MODEL_NAME --split $i --dataset citeseer --seed_num 5 --model_name $j --mode sweep
         echo "Done with $i $j"
     done
 done

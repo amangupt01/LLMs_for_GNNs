@@ -8,3 +8,6 @@ runs/
 .vscode/
 *.pt
 *.bin
+track_runs/
+*.npy
+*.csv

@@ -1,5 +1,6 @@
 python3 baseline.py --data_format sbert --split random --dataset cora --lr 0.01 --seed_num 5
 
+python3 baseline.py --data_format sbert_updated --split random --dataset history --lr 0.01 --seed_num 5
 
 
 python3 baseline.py 
@@ -77,8 +78,8 @@ Test Accuracy: 68.40 ± 2.11
 Test acc: [0.7064796905222437, 0.6929400386847195, 0.6441005802707931, 0.6856866537717602, 0.6910058027079303]
 
 sbert_extra_embed
-Test Accuracy: 91.30 ± 0.55
-Test acc: [0.9182785299806576, 0.9163442940038685, 0.9115087040618955, 0.9158607350096711, 0.9028046421663443]
+Test Accuracy: 82.90 ± 0.90
+Test acc: [0.8404255319148937, 0.8351063829787234, 0.8317214700193424, 0.8225338491295938, 0.8152804642166345]
 
 Experiments to Run
 Type-1 (GCN, GAT, MLP, GraphSage)
@@ -97,6 +98,83 @@ Already - 2(random vs fixed) * 3 (GCN, GAT, MLP) - 6
 1) Appending Stage -> Either at Text Level or at Embedding Level - 2
 2) Combination fo TAPE and KIA (TAPE+KIA, TA + KEA!!, KEA!!, PE!!, TAPE) - 4
 3) Differnet types of Models for Embeddings- (sbert, e5-small, Mistral) - 2
+
+
+
+
+# Generating the first level Embedding
+# change line 158's name to the desired name before running this command
+python3 baseline.py --data_format tfidf --split random --model_name GCN --dataset cora --lr 0.01 --seed_num 5
+
+python3 baseline.py --data_format tfidf --split fixed --model_name GCN --dataset cora --lr 0.01 --seed_num 5
+
+python3 baseline.py --data_format sbert_extra_embed --split random --dataset cora --lr 0.01 --seed_num 5
+
+python3 baseline.py --data_format sbert_extra_embed --split fixed --dataset cora --lr 0.01 --seed_num 5
+
+python3 baseline.py --data_format tfidf --split random --model_name GCN --dataset citeseer --lr 0.01 --seed_num 5
+
+
+
+
+
+## Random Increasing Layer
+
+Random Split
+Num Layer - 2 
+MLP - 91.45 ± 2.57
+GCN - 89.61 ± 1.64
+GAT - 90.31 ± 1.64
+
+Num Layer - 3
+MLP - 90.87 ± 2.35
+GCN - 88.55 ± 0.96
+GAT - 90.35 ± 1.89
+
+Num Layer - 4
+MLP - 90.83 ± 2.32
+GCN - 88.47 ± 0.86
+GAT - 89.83 ± 1.72
+
+
+Num Layer - 5
+MLP - 90.61 ± 2.25
+GCN - 87.92 ± 1.22
+GAT - 88.73 ± 2.16
+
+Num Layer - 6
+MLP - 89.76 ± 1.97
+GCN - 87.73 ± 1.26
+GAT - 89.10 ± 1.40
+
+
+
+Fixed Split
+
+Num Layer - 2
+MLP - 82.67 ± 1.21
+GCN - 83.02 ± 0.87
+GAT - 83.36 ± 0.96
+
+Num Layer - 3
+MLP - 82.01 ± 0.69
+GCN - 82.16 ± 1.08
+GAT - 81.97 ± 1.20
+
+Num Layer - 4
+MLP - 81.18 ± 1.51
+GCN - 81.19 ± 0.95
+GAT - 81.34 ± 1.29
+
+Num Layer - 5
+MLP - 80.42 ± 1.19
+GCN - 80.92 ± 0.97
+GAT - 79.36 ± 1.25
+
+Num Layer - 6
+MLP - 78.52 ± 1.29
+GCN - 79.27 ± 1.60
+GAT - 76.56 ± 0.96
 
 
 
