@@ -12,5 +12,15 @@
 - Run the command ```python3 baseline.py --data_format sbert --split random --dataset pubmed --lr 0.01 --seed_num 5``` with the apt choice of dataset, split and model_name(MLP, GCN or GAT)
 
 
+##### TIGER
+- Uncomment lines 158-166 in the file ```baselines.py``` and run the command ```python3 baseline.py --data_format tfidf --split fixed --model_name GCN --dataset cora --lr 0.01 --seed_num 5``` with the appropriate dataset, do ensure to put an apt name at line 166. This will generate the final layer embedding from the GCN. Augment it to the normal embeddings using the snippet shown below
+```python
+    data_random = torch.load(f"preprocessed_data/new/cora_random_sbert.pt", map_location='cpu')
+    extra_embed_random = torch.load(f"embedding_weights/cora_GCN_Layer{i}_outputs_tfidf_random.pt", map_location='cpu')
+    data_random['x'] = torch.cat([data_random['x'], extra_embed_random], dim=1)
+    torch.save(data_random, f"preprocessed_data/new/cora_random_sbert_extra_embed_{i}.pt")
+```
+- After getting the final embedding run the command above for ```baseline.py``` using dataset as ```sbert_extra_embed```
+
 
 
