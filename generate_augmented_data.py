@@ -79,12 +79,12 @@ def main(args):
 
 if __name__=='__main__':
     parser = argparse.ArgumentParser(description='Data Gen')
-    parser.add_argument('--pt_file', default='citeseer_fixed_sbert.pt', type=str, help="Pretrained checkpoint")
-    parser.add_argument('--dataset', default='citeseer', type=str, help="Pretrained checkpoint")
-    parser.add_argument('--data_dir', default='data/', type=str, help="Number of images per iteration")
-    parser.add_argument('--num_neighbours', default=0, type=int, help="Image size to generate")
-    parser.add_argument('--data_type', default='fixed', type=str, help="Data type to generate")
-    parser.add_argument('--random_seed', default=42, type=int, help="Data type to generate")
+    parser.add_argument('--pt_file', default='citeseer_fixed_sbert.pt', type=str, help="Checkpoint for dataset")
+    parser.add_argument('--dataset', default='citeseer', type=str, help="Dataset")
+    parser.add_argument('--data_dir', default='data/', type=str, help="Data Directory")
+    parser.add_argument('--num_neighbours', default=0, type=int, help="Number of neighbors to be taken in the augmented data")
+    parser.add_argument('--data_type', default='fixed', type=str, help="Data setting [random (high-label), fixed (low-label)]")
+    parser.add_argument('--random_seed', default=42, type=int, help="Random Seed")
     args = parser.parse_args()
 
     assert args.data_type in args.pt_file
