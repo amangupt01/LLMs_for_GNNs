@@ -68,12 +68,12 @@ def train(args):
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description='Data Gen')
-    parser.add_argument('--model', default='bert-base-uncased', type=str, help="Pretrained checkpoint")
-    parser.add_argument('--dataset', default='cora', type=str, help="Pretrained checkpoint")
-    parser.add_argument('--data_dir', default='data/', type=str, help="Number of images per iteration")
-    parser.add_argument('--num_neighbours', default=25, type=int, help="Image size to generate")
-    parser.add_argument('--data_type', default='fixed', type=str, help="Data type to generate")
-    parser.add_argument('--eval_steps', default=200, type=int, help="Data type to generate")
+    parser.add_argument('--model', default='bert-base-uncased', type=str, help="Pretrained model")
+    parser.add_argument('--dataset', default='cora', type=str, help="Dataset")
+    parser.add_argument('--data_dir', default='data/', type=str, help="Data Directory")
+    parser.add_argument('--num_neighbours', default=25, type=int, help="Number of neighbors in the node text")
+    parser.add_argument('--data_type', default='fixed', type=str, help="Data Setting [random (high-label), fixed (low-label]")
+    parser.add_argument('--eval_steps', default=200, type=int, help="Number of steps after which the model is evaluated")
     args = parser.parse_args()
     print(args)
 
